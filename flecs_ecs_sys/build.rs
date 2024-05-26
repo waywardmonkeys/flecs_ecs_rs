@@ -305,6 +305,11 @@ fn main() {
             Some(term_count_max.to_string().as_str()),
         );
 
+        if std::env::var("TARGET").unwrap() == "wasm32-unknown-unknown" {
+            println!("cargo:rerun-if-changed=wasm-sysroot");
+            build.include(&std::path::Path::new("wasm-sysroot/include"));
+        }
+
         build.compile("flecs");
 
         //TODO C might complain about unused functions when disabling certain features, turn the warning off?
